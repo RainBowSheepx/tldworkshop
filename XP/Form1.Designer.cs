@@ -34,13 +34,12 @@ namespace XP
             this.ResizeBarBottom = new System.Windows.Forms.Panel();
             this.ItemList = new System.Windows.Forms.FlowLayoutPanel();
             this.itemPanel = new System.Windows.Forms.Panel();
+            this.DescriptionText = new System.Windows.Forms.Label();
+            this.ModThumbnail = new System.Windows.Forms.PictureBox();
             this.DateText = new System.Windows.Forms.Label();
             this.VersionText = new System.Windows.Forms.Label();
             this.AuthText = new System.Windows.Forms.Label();
             this.Title = new System.Windows.Forms.Label();
-            this.DescriptionText = new System.Windows.Forms.Label();
-            this.ModThumbnail = new System.Windows.Forms.PictureBox();
-            this.submodb1 = new System.Windows.Forms.Button();
             this.download = new System.Windows.Forms.Button();
             this.mymods = new System.Windows.Forms.Button();
             this.downloadbar = new System.Windows.Forms.ProgressBar();
@@ -64,7 +63,6 @@ namespace XP
             this.TitleBarRight = new System.Windows.Forms.PictureBox();
             this.TitleBarLeft = new System.Windows.Forms.PictureBox();
             this.TitleBar = new System.Windows.Forms.PictureBox();
-            this.submodl = new System.Windows.Forms.Label();
             this.SubModDes = new System.Windows.Forms.RichTextBox();
             this.submodl2 = new System.Windows.Forms.Label();
             this.SubModl3 = new System.Windows.Forms.Label();
@@ -138,7 +136,6 @@ namespace XP
             this.ItemList.BackColor = System.Drawing.Color.White;
             this.ItemList.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ItemList.Controls.Add(this.itemPanel);
-            this.ItemList.Controls.Add(this.submodb1);
             this.ItemList.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ItemList.Location = new System.Drawing.Point(12, 59);
             this.ItemList.Name = "ItemList";
@@ -163,6 +160,31 @@ namespace XP
             this.itemPanel.TabIndex = 0;
             this.itemPanel.Visible = false;
             this.itemPanel.Click += new System.EventHandler(this.Select_Listing);
+            // 
+            // DescriptionText
+            // 
+            this.DescriptionText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DescriptionText.BackColor = System.Drawing.Color.Transparent;
+            this.DescriptionText.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DescriptionText.Location = new System.Drawing.Point(109, 34);
+            this.DescriptionText.Name = "DescriptionText";
+            this.DescriptionText.Size = new System.Drawing.Size(190, 76);
+            this.DescriptionText.TabIndex = 5;
+            this.DescriptionText.Text = "Description";
+            this.DescriptionText.Click += new System.EventHandler(this.Select_Listing);
+            // 
+            // ModThumbnail
+            // 
+            this.ModThumbnail.BackColor = System.Drawing.Color.Transparent;
+            this.ModThumbnail.Location = new System.Drawing.Point(3, 3);
+            this.ModThumbnail.Name = "ModThumbnail";
+            this.ModThumbnail.Size = new System.Drawing.Size(100, 103);
+            this.ModThumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.ModThumbnail.TabIndex = 0;
+            this.ModThumbnail.TabStop = false;
+            this.ModThumbnail.Click += new System.EventHandler(this.Select_Listing);
             // 
             // DateText
             // 
@@ -216,43 +238,6 @@ namespace XP
             this.Title.TabIndex = 1;
             this.Title.Text = "ModName";
             this.Title.Click += new System.EventHandler(this.Select_Listing);
-            // 
-            // DescriptionText
-            // 
-            this.DescriptionText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DescriptionText.BackColor = System.Drawing.Color.Transparent;
-            this.DescriptionText.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DescriptionText.Location = new System.Drawing.Point(109, 34);
-            this.DescriptionText.Name = "DescriptionText";
-            this.DescriptionText.Size = new System.Drawing.Size(190, 76);
-            this.DescriptionText.TabIndex = 5;
-            this.DescriptionText.Text = "Description";
-            this.DescriptionText.Click += new System.EventHandler(this.Select_Listing);
-            // 
-            // ModThumbnail
-            // 
-            this.ModThumbnail.BackColor = System.Drawing.Color.Transparent;
-            this.ModThumbnail.Location = new System.Drawing.Point(3, 3);
-            this.ModThumbnail.Name = "ModThumbnail";
-            this.ModThumbnail.Size = new System.Drawing.Size(100, 103);
-            this.ModThumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.ModThumbnail.TabIndex = 0;
-            this.ModThumbnail.TabStop = false;
-            this.ModThumbnail.Click += new System.EventHandler(this.Select_Listing);
-            // 
-            // submodb1
-            // 
-            this.submodb1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.submodb1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.submodb1.Location = new System.Drawing.Point(309, 69);
-            this.submodb1.Name = "submodb1";
-            this.submodb1.Size = new System.Drawing.Size(129, 45);
-            this.submodb1.TabIndex = 35;
-            this.submodb1.Text = "Submit Mod";
-            this.submodb1.UseVisualStyleBackColor = true;
-            this.submodb1.Visible = false;
             // 
             // download
             // 
@@ -578,16 +563,6 @@ namespace XP
             this.TitleBar.DoubleClick += new System.EventHandler(this.Maximise_Window_Toggle);
             this.TitleBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Move_Window);
             // 
-            // submodl
-            // 
-            this.submodl.AutoSize = true;
-            this.submodl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.submodl.Location = new System.Drawing.Point(197, 42);
-            this.submodl.Name = "submodl";
-            this.submodl.Size = new System.Drawing.Size(249, 25);
-            this.submodl.TabIndex = 28;
-            this.submodl.Text = "Submit your mod here:";
-            // 
             // SubModDes
             // 
             this.SubModDes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -717,6 +692,7 @@ namespace XP
             // 
             // searchin
             // 
+            this.searchin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.searchin.Location = new System.Drawing.Point(368, 35);
             this.searchin.Name = "searchin";
             this.searchin.Size = new System.Drawing.Size(184, 20);
@@ -726,6 +702,7 @@ namespace XP
             // 
             // searchl
             // 
+            this.searchl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.searchl.AutoSize = true;
             this.searchl.Location = new System.Drawing.Point(274, 38);
             this.searchl.Name = "searchl";
@@ -744,7 +721,6 @@ namespace XP
             this.ClientSize = new System.Drawing.Size(661, 570);
             this.Controls.Add(this.searchl);
             this.Controls.Add(this.searchin);
-            this.Controls.Add(this.submodl);
             this.Controls.Add(this.XPcheck);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.pictureBox1);
@@ -846,13 +822,11 @@ namespace XP
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox XPcheck;
         private System.Windows.Forms.Button submod;
-        private System.Windows.Forms.Label submodl;
         private System.Windows.Forms.RichTextBox SubModDes;
         private System.Windows.Forms.Label submodl2;
         private System.Windows.Forms.Label SubModl3;
         private System.Windows.Forms.ListBox submoddragdrop;
         private System.Windows.Forms.Label submodl4;
-        private System.Windows.Forms.Button submodb1;
         private System.Windows.Forms.Button submodb;
         private System.Windows.Forms.Label modderl1;
         private System.Windows.Forms.Label modderl2;

@@ -42,10 +42,10 @@ namespace XP
         public Form1()
         {
             InitializeComponent();
-            submodl.Visible = false;
+          
             this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width, Screen.FromControl(this).WorkingArea.Height);
             refrence = this;
-            submodl.Visible = false;
+            
             submodl2.Visible = false;
             SubModDes.Visible = false;
 
@@ -674,8 +674,6 @@ namespace XP
                 download.Visible = false;
                 back.Visible = false;
                 submod.Visible = false;
-                submodl.Visible = false;
-                submodl.Visible = false;
                 submodl2.Visible = false;
                 SubModDes.Visible = false;
                 SubModl3.Visible = false;
@@ -707,7 +705,7 @@ namespace XP
                 searchin.Visible = true;
                 searchl.Visible = true;
                 mymods.Visible = true;
-                submodl.Visible = false;
+            
                 refreshList(0);
             }
 
@@ -839,7 +837,6 @@ namespace XP
 
             submodb.Visible = true;
             submodl4.Visible = true;
-            submodl.Visible = true;
             submodl2.Visible = true;
             SubModDes.Visible = true;
             SubModl3.Visible = true;
@@ -981,8 +978,7 @@ namespace XP
                         download.Visible = false;
                         back.Visible = false;
                         submod.Visible = false;
-                        submodl.Visible = false;
-                        submodl.Visible = false;
+
                         submodl2.Visible = false;
                         SubModDes.Visible = false;
                         SubModl3.Visible = false;
@@ -1007,7 +1003,7 @@ namespace XP
                     else
                     {
                         mymods.Visible = true;
-                        submodl.Visible = false;
+             
                         refreshList(0);
                     }
 
