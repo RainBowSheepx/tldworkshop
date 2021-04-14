@@ -664,7 +664,7 @@ namespace XP
 
         private void button1_Click(object sender, EventArgs e)
         {
-            mymods.Visible = true; //have to do that, else it would bug out...
+        //    mymods.Visible = true; //have to do that, else it would bug out...
             if (mymods.Visible)
             {
                 searchl.Visible = false;
@@ -703,6 +703,9 @@ namespace XP
             }
             else
             {
+                searchin.Text = "";
+                searchin.Visible = true;
+                searchl.Visible = true;
                 mymods.Visible = true;
                 submodl.Visible = false;
                 refreshList(0);
