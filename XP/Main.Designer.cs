@@ -1,6 +1,6 @@
 namespace XP
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@ namespace XP
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.ResizeBarLeft = new System.Windows.Forms.Panel();
             this.ResizeBarRight = new System.Windows.Forms.Panel();
             this.ResizeBarBottom = new System.Windows.Forms.Panel();

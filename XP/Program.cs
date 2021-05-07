@@ -21,7 +21,7 @@ namespace XP
                 AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1());
+                Application.Run(new Main());
             } catch (Exception e)
             {
                 MessageBox.Show("Unable to run workshop: " + e.Message, "Error", MessageBoxButtons.OK,MessageBoxIcon.Error);

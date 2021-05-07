@@ -25,11 +25,11 @@ using System.Net.Configuration;
 
 namespace XP
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
         public static string pwd = "RainbeanLP345";
         public string filecheck;
-        public static Form1 refrence;
+        public static Main refrence;
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
         public float nowversion = 1.1f;
@@ -39,7 +39,7 @@ namespace XP
         public static extern bool ReleaseCapture();
 
         //------------------------------WINDOWS XP STYLE WINDOW STUFF HAPPENS HERE
-        public Form1()
+        public Main()
         {
             InitializeComponent();
           
@@ -230,18 +230,18 @@ namespace XP
                 ItemDetails = modData;
 
                 
-                MainControl = ControlFactory.CloneCtrl(Form1.refrence.itemPanel);
+                MainControl = ControlFactory.CloneCtrl(Main.refrence.itemPanel);
 
-                Form1.refrence.Controls.Add(MainControl);
+                Main.refrence.Controls.Add(MainControl);
                 MainControl.Show();
-                MainControl.Click += new System.EventHandler(Form1.refrence.Select_Listing);
+                MainControl.Click += new System.EventHandler(Main.refrence.Select_Listing);
 
-                foreach (Control subControl in Form1.refrence.itemPanel.Controls)
+                foreach (Control subControl in Main.refrence.itemPanel.Controls)
                 {
                     Control newSubControl = ControlFactory.CloneCtrl(subControl);
                     MainControl.Controls.Add(newSubControl);
                     newSubControl.Show();
-                    newSubControl.Click += new System.EventHandler(Form1.refrence.Select_Listing);
+                    newSubControl.Click += new System.EventHandler(Main.refrence.Select_Listing);
 
                     switch (subControl.Name.ToLower())
                     {
@@ -260,19 +260,19 @@ namespace XP
                     }
 
                 }
-                Form1.refrence.itemPanel.BackColor = Color.Gray;
-                MainControl.Parent = Form1.refrence.ItemList;
-                Form1.refrence.ItemList.Update();
+                Main.refrence.itemPanel.BackColor = Color.Gray;
+                MainControl.Parent = Main.refrence.ItemList;
+                Main.refrence.ItemList.Update();
                 UpdateDetails();
             }
 
             public void UpdateDetails()
             {
-                if (Form1.refrence.checkBox1.Checked)
+                if (Main.refrence.checkBox1.Checked)
 
-                    Form1.refrence.itemPanel.BackColor = Color.Gray;
+                    Main.refrence.itemPanel.BackColor = Color.Gray;
                 else
-                    Form1.refrence.itemPanel.BackColor = Color.GhostWhite;
+                    Main.refrence.itemPanel.BackColor = Color.GhostWhite;
                 ItemName.Text = ItemDetails.Name;
                 ItemImage.Tag = ItemDetails.PictureLink;
                 ItemAuthor.Text = ItemDetails.Author;
@@ -291,7 +291,7 @@ namespace XP
 
             public void Select(bool selected)
             {
-                if (Form1.refrence.checkBox1.Checked)
+                if (Main.refrence.checkBox1.Checked)
                     MainControl.BackColor = (selected) ? Color.LightGray : Color.Gray;
                 else
                     MainControl.BackColor = (selected) ? Color.CornflowerBlue : Color.GhostWhite;
@@ -597,7 +597,8 @@ namespace XP
                 download.Text = "Delete";
                 mymods.Text = "Back";
                 mymods.Visible = false;
-                string[] h = new string[] { "https://cdn.discordapp.com/attachments/752578049064697906/753228626752831609/zefQXQ7XrXo.jpg", "https://cdn.discordapp.com/attachments/752578049064697906/753243489512194098/DCIM_2019-02-23-5285246.png", "https://cdn.discordapp.com/attachments/752578049064697906/753616272217866341/catjammercar_sqenu_is_rarted_v2.gif", "https://cdn.discordapp.com/attachments/752578049064697906/755897138956861572/unknown.png", "https://cdn.discordapp.com/attachments/752578049064697906/758121802643013643/2019112610435374.png", "https://cdn.discordapp.com/attachments/752578049064697906/758122531721969694/20190129_033224252.png", "https://cdn.discordapp.com/attachments/752578049064697906/758123152521166848/unknown.png", "https://cdn.discordapp.com/attachments/655083079324532759/760163314734071879/72327593_1673268889469772_6064536625596071936_n.png", "https://cdn.discordapp.com/attachments/752578049064697906/761441490282217483/Screenshot_2020-09-06-21-51-27.png", "https://cdn.discordapp.com/attachments/752578049064697906/761526785392246794/Screenshot_2020-09-06-22-00-19-1.png", "https://cdn.discordapp.com/attachments/701698502060671079/761639368376844308/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639646392090644/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639772799762472/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639797151236106/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761640053695971348/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639828935934003/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639815031947344/image.jpg" };
+
+                //string[] h = new string[] { "https://cdn.discordapp.com/attachments/752578049064697906/753228626752831609/zefQXQ7XrXo.jpg", "https://cdn.discordapp.com/attachments/752578049064697906/753243489512194098/DCIM_2019-02-23-5285246.png", "https://cdn.discordapp.com/attachments/752578049064697906/753616272217866341/catjammercar_sqenu_is_rarted_v2.gif", "https://cdn.discordapp.com/attachments/752578049064697906/755897138956861572/unknown.png", "https://cdn.discordapp.com/attachments/752578049064697906/758121802643013643/2019112610435374.png", "https://cdn.discordapp.com/attachments/752578049064697906/758122531721969694/20190129_033224252.png", "https://cdn.discordapp.com/attachments/752578049064697906/758123152521166848/unknown.png", "https://cdn.discordapp.com/attachments/655083079324532759/760163314734071879/72327593_1673268889469772_6064536625596071936_n.png", "https://cdn.discordapp.com/attachments/752578049064697906/761441490282217483/Screenshot_2020-09-06-21-51-27.png", "https://cdn.discordapp.com/attachments/752578049064697906/761526785392246794/Screenshot_2020-09-06-22-00-19-1.png", "https://cdn.discordapp.com/attachments/701698502060671079/761639368376844308/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639646392090644/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639772799762472/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639797151236106/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761640053695971348/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639828935934003/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639815031947344/image.jpg" };
 
                 for (int x = 0; x < jsonn.ModList.Length; x++)
                 {
