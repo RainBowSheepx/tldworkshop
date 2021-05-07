@@ -354,6 +354,7 @@ namespace XP
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+
             //this is just example test, populating with a bunch of made up mods, delete this 
             WebClient web = new WebClient();
             DataContractJsonSerializer json2 = new DataContractJsonSerializer(typeof(CheckVer));
@@ -384,7 +385,7 @@ namespace XP
                 ModListings.Add(new ModListing(mod));
             }
             //end of example
-
+            refreshList(0);
         }
 
         public static List<ModListing> ModListings = new List<ModListing>();
@@ -641,7 +642,7 @@ namespace XP
         private void gotomods_Click(object sender, EventArgs e)
         {
             searchin.Text = "";
-            refreshList(0);
+          
             ItemList.Visible = true;
             mymods.Visible = true;
             download.Visible = true;
