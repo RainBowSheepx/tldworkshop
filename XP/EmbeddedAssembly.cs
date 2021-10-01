@@ -1,102 +1,88 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
+
 namespace XP
 {
+	// Token: 0x02000004 RID: 4
+	public class EmbeddedAssembly
+	{
+		// Token: 0x06000010 RID: 16 RVA: 0x000024B4 File Offset: 0x000006B4
+		public static void Load(string embeddedResource, string fileName)
+		{
+			if (EmbeddedAssembly.dic == null)
+			{
+				EmbeddedAssembly.dic = new Dictionary<string, Assembly>();
+			}
+			byte[] array = null;
+			Assembly assembly;
+			using (Stream manifestResourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedResource))
+			{
+				if (manifestResourceStream == null)
+				{
+					throw new Exception(embeddedResource + " is not found in Embedded Resources.");
+				}
+				array = new byte[(int)manifestResourceStream.Length];
+				manifestResourceStream.Read(array, 0, (int)manifestResourceStream.Length);
+				try
+				{
+					assembly = Assembly.Load(array);
+					EmbeddedAssembly.dic.Add(assembly.FullName, assembly);
+					return;
+				}
+				catch
+				{
+				}
+			}
+			bool flag = false;
+			string path = "";
+			using (SHA1CryptoServiceProvider sha1CryptoServiceProvider = new SHA1CryptoServiceProvider())
+			{
+				string a = BitConverter.ToString(sha1CryptoServiceProvider.ComputeHash(array)).Replace("-", string.Empty);
+				path = Path.GetTempPath() + fileName;
+				if (File.Exists(path))
+				{
+					byte[] buffer = File.ReadAllBytes(path);
+					string b = BitConverter.ToString(sha1CryptoServiceProvider.ComputeHash(buffer)).Replace("-", string.Empty);
+					if (a == b)
+					{
+						flag = true;
+					}
+					else
+					{
+						flag = false;
+					}
+				}
+				else
+				{
+					flag = false;
+				}
+			}
+			if (!flag)
+			{
+				File.WriteAllBytes(path, array);
+			}
+			assembly = Assembly.LoadFile(path);
+			EmbeddedAssembly.dic.Add(assembly.FullName, assembly);
+		}
 
+		// Token: 0x06000011 RID: 17 RVA: 0x0000261C File Offset: 0x0000081C
+		public static Assembly Get(string assemblyFullName)
+		{
+			if (EmbeddedAssembly.dic == null || EmbeddedAssembly.dic.Count == 0)
+			{
+				return null;
+			}
+			if (EmbeddedAssembly.dic.ContainsKey(assemblyFullName))
+			{
+				return EmbeddedAssembly.dic[assemblyFullName];
+			}
+			return null;
+		}
 
-    public class EmbeddedAssembly
-    {
-        // Version 1.3
-
-        static Dictionary<string, Assembly> dic = null;
-
-        public static void Load(string embeddedResource, string fileName)
-        {
-            if (dic == null)
-                dic = new Dictionary<string, Assembly>();
-
-            byte[] ba = null;
-            Assembly asm = null;
-            Assembly curAsm = Assembly.GetExecutingAssembly();
-
-            using (Stream stm = curAsm.GetManifestResourceStream(embeddedResource))
-            {
-                // Either the file is not existed or it is not mark as embedded resource
-                if (stm == null)
-                    throw new Exception(embeddedResource + " is not found in Embedded Resources.");
-
-                // Get byte[] from the file from embedded resource
-                ba = new byte[(int)stm.Length];
-                stm.Read(ba, 0, (int)stm.Length);
-                try
-                {
-                    asm = Assembly.Load(ba);
-
-                    // Add the assembly/dll into dictionary
-                    dic.Add(asm.FullName, asm);
-                    return;
-                }
-                catch
-                {
-                    // Purposely do nothing
-                    // Unmanaged dll or assembly cannot be loaded directly from byte[]
-                    // Let the process fall through for next part
-                }
-            }
-
-            bool fileOk = false;
-            string tempFile = "";
-
-            using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
-            {
-                string fileHash = BitConverter.ToString(sha1.ComputeHash(ba)).Replace("-", string.Empty); ;
-
-                tempFile = Path.GetTempPath() + fileName;
-
-                if (File.Exists(tempFile))
-                {
-                    byte[] bb = File.ReadAllBytes(tempFile);
-                    string fileHash2 = BitConverter.ToString(sha1.ComputeHash(bb)).Replace("-", string.Empty);
-
-                    if (fileHash == fileHash2)
-                    {
-                        fileOk = true;
-                    }
-                    else
-                    {
-                        fileOk = false;
-                    }
-                }
-                else
-                {
-                    fileOk = false;
-                }
-            }
-
-            if (!fileOk)
-            {
-                System.IO.File.WriteAllBytes(tempFile, ba);
-            }
-
-            asm = Assembly.LoadFile(tempFile);
-
-            dic.Add(asm.FullName, asm);
-        }
-
-        public static Assembly Get(string assemblyFullName)
-        {
-            if (dic == null || dic.Count == 0)
-                return null;
-
-            if (dic.ContainsKey(assemblyFullName))
-                return dic[assemblyFullName];
-
-            return null;
-        }
-    }
+		// Token: 0x04000005 RID: 5
+		private static Dictionary<string, Assembly> dic;
+	}
 }
