@@ -1,234 +1,171 @@
-
-        using System;
-using System.Windows.Forms;
-using System.Reflection;
+﻿using System;
 using System.Collections;
 using System.ComponentModel;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Diagnostics;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace XP
 {
-	#region ControlFactory
-	/// <summary>
-	/// Summary description for FormControlFactory.
-	/// </summary>
+	// Token: 0x02000002 RID: 2
 	public class ControlFactory
 	{
-		public ControlFactory()
-		{
-			
-		}
 
-		public static Control CreateControl(string ctrlName,string partialName)
+		// Token: 0x06000002 RID: 2 RVA: 0x00002058 File Offset: 0x00000258
+		public static Control CreateControl(string ctrlName, string partialName)
 		{
+			Control result;
 			try
 			{
-				Control ctrl;
-				switch(ctrlName) 
-				{				
-					case "Label":
-						ctrl = new Label();
-						break;
-					case "TextBox":
-						ctrl = new TextBox();
-						break;
-					case "PictureBox":
-						ctrl = new PictureBox();
-						break;
-					case "ListView":
-						ctrl = new ListView();
-						break;
-					case "ComboBox":
-						ctrl = new ComboBox();
-						break;
-					case "Button":
-						ctrl = new Button();
-						break;
-					case "CheckBox":
-						ctrl = new CheckBox();
-						break;
-					case "MonthCalender":
-						ctrl = new MonthCalendar();
-						break;
-					case "DateTimePicker":
-						ctrl = new DateTimePicker();
-						break;
-					default:
-						Assembly controlAsm = Assembly.LoadWithPartialName(partialName);
-						Type controlType = controlAsm.GetType(partialName + "." + ctrlName);				
-						ctrl = (Control)Activator.CreateInstance(controlType);
-						break;
-
-				}		
-				return ctrl;
-
+				Control control;
+				if (ctrlName != null)
+				{
+					uint num = 1; //<PrivateImplementationDetails>.ComputeStringHash(ctrlName);
+					if (num <= 1595554146U)
+					{
+						if (num <= 496722843U)
+						{
+							if (num != 278373862U)
+							{
+								if (num == 496722843U)
+								{
+									if (ctrlName == "TextBox")
+									{
+										control = new TextBox();
+										goto IL_193;
+									}
+								}
+							}
+							else if (ctrlName == "PictureBox")
+							{
+								control = new PictureBox();
+								goto IL_193;
+							}
+						}
+						else if (num != 864557713U)
+						{
+							if (num == 1595554146U)
+							{
+								if (ctrlName == "DateTimePicker")
+								{
+									control = new DateTimePicker();
+									goto IL_193;
+								}
+							}
+						}
+						else if (ctrlName == "Button")
+						{
+							control = new Button();
+							goto IL_193;
+						}
+					}
+					else if (num <= 1933324558U)
+					{
+						if (num != 1819906012U)
+						{
+							if (num == 1933324558U)
+							{
+								if (ctrlName == "ComboBox")
+								{
+									control = new ComboBox();
+									goto IL_193;
+								}
+							}
+						}
+						else if (ctrlName == "ListView")
+						{
+							control = new ListView();
+							goto IL_193;
+						}
+					}
+					else if (num != 2642369432U)
+					{
+						if (num != 2664231581U)
+						{
+							if (num == 3911048475U)
+							{
+								if (ctrlName == "MonthCalender")
+								{
+									control = new MonthCalendar();
+									goto IL_193;
+								}
+							}
+						}
+						else if (ctrlName == "Label")
+						{
+							control = new Label();
+							goto IL_193;
+						}
+					}
+					else if (ctrlName == "CheckBox")
+					{
+						control = new CheckBox();
+						goto IL_193;
+					}
+				}
+				control = (Control)Activator.CreateInstance(Assembly.LoadWithPartialName(partialName).GetType(partialName + "." + ctrlName));
+				IL_193:
+				result = control;
 			}
 			catch (Exception ex)
 			{
-				System.Diagnostics.Trace.WriteLine("create control failed:" + ex.Message);
-				return new Control();
-			}	
+				Trace.WriteLine("create control failed:" + ex.Message);
+				result = new Control();
+			}
+			return result;
 		}
-				
-		public static void SetControlProperties(Control ctrl,Hashtable propertyList)
-		{
-			PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(ctrl);
 
-			foreach (PropertyDescriptor myProperty in properties)
-			{	
-				if(propertyList.Contains(myProperty.Name))
+		// Token: 0x06000003 RID: 3 RVA: 0x00002238 File Offset: 0x00000438
+		public static void SetControlProperties(Control ctrl, Hashtable propertyList)
+		{
+			foreach (object obj in TypeDescriptor.GetProperties(ctrl))
+			{
+				PropertyDescriptor propertyDescriptor = (PropertyDescriptor)obj;
+				if (propertyList.Contains(propertyDescriptor.Name))
 				{
-					Object obj = propertyList[myProperty.Name];
+					object value = propertyList[propertyDescriptor.Name];
 					try
 					{
-						myProperty.SetValue(ctrl,obj);
+						propertyDescriptor.SetValue(ctrl, value);
 					}
-					catch(Exception ex)
+					catch (Exception ex)
 					{
-						//do nothing, just continue
-						System.Diagnostics.Trace.WriteLine(ex.Message);	
+						Trace.WriteLine(ex.Message);
 					}
-					
 				}
-
-			}	
-
+			}
 		}
 
+		// Token: 0x06000004 RID: 4 RVA: 0x000022C8 File Offset: 0x000004C8
 		public static Control CloneCtrl(Control ctrl)
 		{
-
-			CBFormCtrl cbCtrl = new CBFormCtrl(ctrl);
-			Control newCtrl = ControlFactory.CreateControl(cbCtrl.CtrlName,cbCtrl.PartialName);
-
-			ControlFactory.SetControlProperties(newCtrl,cbCtrl.PropertyList);
-
-			return newCtrl;
+			CBFormCtrl cbformCtrl = new CBFormCtrl(ctrl);
+			Control control = ControlFactory.CreateControl(cbformCtrl.CtrlName, cbformCtrl.PartialName);
+			ControlFactory.SetControlProperties(control, cbformCtrl.PropertyList);
+			return control;
 		}
 
+		// Token: 0x06000005 RID: 5 RVA: 0x000022FC File Offset: 0x000004FC
 		public static void CopyCtrl2ClipBoard(Control ctrl)
 		{
-			CBFormCtrl cbCtrl = new CBFormCtrl(ctrl);
-			IDataObject ido = new DataObject();
-				
-			ido.SetData(CBFormCtrl.Format.Name,true,cbCtrl);
-			Clipboard.SetDataObject(ido,false);
-
+			CBFormCtrl data = new CBFormCtrl(ctrl);
+			DataObject dataObject = new DataObject();
+			((IDataObject)dataObject).SetData(CBFormCtrl.Format.Name, true, data);
+			Clipboard.SetDataObject(dataObject, false);
 		}
 
+		// Token: 0x06000006 RID: 6 RVA: 0x00002330 File Offset: 0x00000530
 		public static Control GetCtrlFromClipBoard()
 		{
-			Control ctrl = new Control();
-
-			IDataObject ido = Clipboard.GetDataObject(); 
-			if(ido.GetDataPresent(CBFormCtrl.Format.Name))
+			Control control = new Control();
+			IDataObject dataObject = Clipboard.GetDataObject();
+			if (dataObject.GetDataPresent(CBFormCtrl.Format.Name))
 			{
-				CBFormCtrl cbCtrl = ido.GetData(CBFormCtrl.Format.Name) as CBFormCtrl; 
-
-				ctrl = ControlFactory.CreateControl(cbCtrl.CtrlName,cbCtrl.PartialName);
-				ControlFactory.SetControlProperties(ctrl,cbCtrl.PropertyList);
-				
+				CBFormCtrl cbformCtrl = dataObject.GetData(CBFormCtrl.Format.Name) as CBFormCtrl;
+				control = ControlFactory.CreateControl(cbformCtrl.CtrlName, cbformCtrl.PartialName);
+				ControlFactory.SetControlProperties(control, cbformCtrl.PropertyList);
 			}
-			return ctrl;
+			return control;
 		}
-
-	
 	}
-
-	#endregion
-
-	#region Clipboard Support
-	/// <summary>
-	/// Summary description for CBFormCtrl.
-	/// </summary>
-	[Serializable()]
-	public class CBFormCtrl//clipboard form control
-	{
-		private static DataFormats.Format format;
-		private string ctrlName;
-		private string partialName;
-		private Hashtable propertyList = new Hashtable();
-
-		static CBFormCtrl()
-		{
-			// Registers a new data format with the windows Clipboard
-			format = DataFormats.GetFormat(typeof(CBFormCtrl).FullName);
-		}
-		
-		public static DataFormats.Format Format
-		{
-			get
-			{
-				return format;
-			}
-		}
-		public string CtrlName
-		{
-			get
-			{
-				return ctrlName;
-			}
-			set
-			{
-				ctrlName = value;
-			}
-		}
-
-		public string PartialName
-		{
-			get
-			{
-				return partialName;
-			}
-			set
-			{
-				partialName = value;
-			}
-		}
-
-		public Hashtable PropertyList
-		{
-			get
-			{
-				return propertyList;
-			}
-			
-		}
-
-
-		public CBFormCtrl()
-		{
-			
-		}
-
-		public CBFormCtrl(Control ctrl)
-		{			
-			CtrlName = ctrl.GetType().Name;
-			PartialName = ctrl.GetType().Namespace;
-			
-			PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(ctrl);
-
-			foreach (PropertyDescriptor myProperty in properties)
-			{
-				try
-				{
-					if(myProperty.PropertyType.IsSerializable)
-						propertyList.Add(myProperty.Name,myProperty.GetValue(ctrl));	
-				}
-				catch(Exception ex)
-				{
-					System.Diagnostics.Trace.WriteLine(ex.Message);	
-					//do nothing, just continue
-				}
-			
-			}
-			
-		}	
-
-	
-	}
-	#endregion
 }
-
-    
