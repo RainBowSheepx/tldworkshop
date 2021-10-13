@@ -270,13 +270,13 @@ namespace XP
 		// Token: 0x06000022 RID: 34 RVA: 0x00002E9C File Offset: 0x0000109C
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			WebClient webClient = new WebClient();
-			if (float.Parse(((Form1.CheckVer)new DataContractJsonSerializer(typeof(Form1.CheckVer)).ReadObject(new MemoryStream(webClient.DownloadData("http://tldworkshop.hopto.org/check.json")))).newversion) > this.nowversion)
+		//	WebClient webClient = new WebClient();
+/*			if (float.Parse(((Form1.CheckVer)new DataContractJsonSerializer(typeof(Form1.CheckVer)).ReadObject(new MemoryStream(webClient.DownloadData("http://tldworkshop.hopto.org/check.json")))).newversion) > this.nowversion)
 			{
 				MessageBox.Show("New version of workshop is now available! \nDownload from discord.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				Environment.Exit(0);
-			}
-			Form1.JSONN jsonn = (Form1.JSONN)new DataContractJsonSerializer(typeof(Form1.JSONN)).ReadObject(new MemoryStream(webClient.DownloadData("http://tldworkshop.hopto.org/modlist_2.json")));
+			}*/
+
 			string[] array = new string[]
 			{
 				"https://cdn.discordapp.com/attachments/752578049064697906/753228626752831609/zefQXQ7XrXo.jpg",
@@ -297,7 +297,7 @@ namespace XP
 				"https://cdn.discordapp.com/attachments/701698502060671079/761639828935934003/image.jpg",
 				"https://cdn.discordapp.com/attachments/701698502060671079/761639815031947344/image.jpg"
 			};
-			for (int i = 0; i < jsonn.ModList.Length; i++)
+/*			for (int i = 0; i < jsonn.ModList.Length; i++)
 			{
 				Form1.Mod mod = new Form1.Mod
 				{
@@ -317,7 +317,7 @@ namespace XP
 					mod.PictureLink = "http://tldworkshop.hopto.org/mods/pictures/notfound.png";
 				}
 				Form1.ModListings.Add(new Form1.ModListing(mod));
-			}
+			}*/
 		}
 
 		// Token: 0x06000023 RID: 35 RVA: 0x000030A0 File Offset: 0x000012A0
@@ -389,9 +389,9 @@ namespace XP
 				zipFile.Dispose();
 				this.webClient.Dispose();
 			}
-			catch (Exception)
+			catch (Exception b)
 			{
-				
+				MessageBox.Show(b.Message);
 			}
 			File.Copy(text + "/temp/patcher/TLDLoader.dll", Application.StartupPath + "/TLDLoader.dll", true);
 			Process.Start(text + "/temp/patcher/TLDPatcher.exe", "\"" + text + "/temp/patcher/\"");
@@ -452,7 +452,11 @@ namespace XP
 						{
 							File.Delete(text + "\\" + Form1.selectedMod.ItemName.Text + ".dll");
 						}
-						this.webClient.DownloadFileAsync(address, text + "/" + Form1.selectedMod.ItemName.Text + ".dll", true);
+						if (File.Exists(text + "\\" + Form1.selectedMod.ItemDetails.FileName))
+						{
+							File.Delete(text + "\\" + Form1.selectedMod.ItemDetails.FileName);
+						}
+						this.webClient.DownloadFileAsync(address, text + "/" + Form1.selectedMod.ItemDetails.FileName, true);
 						this.webClient.DownloadProgressChanged += this.webClient_DownloadProgressChanged;
 						this.webClient.DownloadFileCompleted += this.webClient_DownloadFileCompleted;
 						this.sw.Start();
@@ -464,6 +468,10 @@ namespace XP
 						if (File.Exists(text + "\\" + Form1.selectedMod.ItemName.Text + ".dll"))
 						{
 							File.Delete(text + "\\" + Form1.selectedMod.ItemName.Text + ".dll");
+						}
+						if (File.Exists(text + "\\" + Form1.selectedMod.ItemDetails.FileName))
+						{
+							File.Delete(text + "\\" + Form1.selectedMod.ItemDetails.FileName);
 						}
 						if (!Directory.Exists(text + "/temp/"))
 						{
@@ -482,7 +490,15 @@ namespace XP
 				}
 				else
 				{
-					File.Delete(text + "/" + Form1.selectedMod.ItemName.Text + ".dll");
+					if(File.Exists(text + "/" + Form1.selectedMod.ItemName + ".dll"))
+                    {
+						File.Delete(text + "/" + Form1.selectedMod.ItemName + ".dll");
+
+					}  if (File.Exists(text + "/" + Form1.selectedMod.ItemDetails.FileName))
+                    {
+						File.Delete(text + "/" + Form1.selectedMod.ItemDetails.FileName);
+					}
+					
 					Form1.selectedMod.MainControl.Controls.Clear();
 					this.refreshList(1);
 					this.download.Enabled = false;
@@ -491,30 +507,37 @@ namespace XP
 		}
 
 		bool listref = false;
-
+		JSONN modlistjson;
 		// Token: 0x0600002A RID: 42 RVA: 0x000039B8 File Offset: 0x00001BB8
 		public void refreshList(int mods)
 		{
+			if(modlistjson == null)
+            {
+				WebClient web = new WebClient();
+				
+				DataContractJsonSerializer json1 = new DataContractJsonSerializer(typeof(JSONN));
+				modlistjson = (JSONN)json1.ReadObject(new System.IO.MemoryStream(web.DownloadData("https://www.dropbox.com/s/q2xe3gr1ema5591/modlist_3.json?dl=1")));
+			}
+
+
 			loadingmods.Visible = true;
 			if (mods == 0)
 			{
 				listref = false;
 				ModListings.Clear();
 				ItemList.Controls.Clear();
-				WebClient web = new WebClient();
 
-				DataContractJsonSerializer json1 = new DataContractJsonSerializer(typeof(JSONN));
 
-				JSONN jsonn = (JSONN)json1.ReadObject(new System.IO.MemoryStream(web.DownloadData("http://tldworkshop.hopto.org/modlist_2.json")));
+
 				download.Text = "Download";
 				mymods.Text = "My Mods";
 				string[] h = new string[] { "https://cdn.discordapp.com/attachments/752578049064697906/753228626752831609/zefQXQ7XrXo.jpg", "https://cdn.discordapp.com/attachments/752578049064697906/753243489512194098/DCIM_2019-02-23-5285246.png", "https://cdn.discordapp.com/attachments/752578049064697906/753616272217866341/catjammercar_sqenu_is_rarted_v2.gif", "https://cdn.discordapp.com/attachments/752578049064697906/755897138956861572/unknown.png", "https://cdn.discordapp.com/attachments/752578049064697906/758121802643013643/2019112610435374.png", "https://cdn.discordapp.com/attachments/752578049064697906/758122531721969694/20190129_033224252.png", "https://cdn.discordapp.com/attachments/752578049064697906/758123152521166848/unknown.png", "https://cdn.discordapp.com/attachments/655083079324532759/760163314734071879/72327593_1673268889469772_6064536625596071936_n.png", "https://cdn.discordapp.com/attachments/752578049064697906/761441490282217483/Screenshot_2020-09-06-21-51-27.png", "https://cdn.discordapp.com/attachments/752578049064697906/761526785392246794/Screenshot_2020-09-06-22-00-19-1.png", "https://cdn.discordapp.com/attachments/701698502060671079/761639368376844308/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639646392090644/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639772799762472/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639797151236106/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761640053695971348/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639828935934003/image.jpg", "https://cdn.discordapp.com/attachments/701698502060671079/761639815031947344/image.jpg" };
-				for (int x = 0; x < jsonn.ModList.Length; x++)
+				for (int x = 0; x < modlistjson.ModList.Length; x++)
 				{
-					Mod mod = new Mod() { Author = jsonn.ModList[x].Author, Link = jsonn.ModList[x].Link, Name = jsonn.ModList[x].Name, Date = jsonn.ModList[x].Date, Description = jsonn.ModList[x].Description, Version = jsonn.ModList[x].Version };
+					Mod mod = new Mod() { Author = modlistjson.ModList[x].Author,FileName = modlistjson.ModList[x].FileName ,Link = modlistjson.ModList[x].Link, Name = modlistjson.ModList[x].Name, Date = modlistjson.ModList[x].Date, Description = modlistjson.ModList[x].Description, Version = modlistjson.ModList[x].Version };
 
-					if (jsonn.ModList[x].PictureLink.Contains(".png"))
-						mod.PictureLink = jsonn.ModList[x].PictureLink;
+					if (modlistjson.ModList[x].PictureLink.Contains(".png") || modlistjson.ModList[x].PictureLink.Contains(".gif"))
+						mod.PictureLink = modlistjson.ModList[x].PictureLink;
 					else
 						mod.PictureLink = "http://tldworkshop.hopto.org/mods/pictures/notfound.png";
 
@@ -528,13 +551,11 @@ namespace XP
 			if (mods == 1)
 			{
 				listref = true;
-				XmlObjectSerializer xmlObjectSerializer = new DataContractJsonSerializer(typeof(Form1.JSONN));
-				WebClient webClient2 = new WebClient();
-				Form1.JSONN jsonn2 = (Form1.JSONN)xmlObjectSerializer.ReadObject(new MemoryStream(webClient2.DownloadData("http://tldworkshop.hopto.org/modlist_2.json")));
-				string str2 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "TheLongDrive\\Mods");
-				Form1.ModListings.Clear();
-				this.ItemList.Controls.Clear();
-				this.download.Text = "Delete";
+
+				string modPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "TheLongDrive\\Mods");
+                Form1.ModListings.Clear();
+                this.ItemList.Controls.Clear();
+                this.download.Text = "Delete";
 				this.mymods.Text = "Back";
 				this.mymods.Visible = true;
 				string[] array2 = new string[]
@@ -557,22 +578,36 @@ namespace XP
 					"https://cdn.discordapp.com/attachments/701698502060671079/761639828935934003/image.jpg",
 					"https://cdn.discordapp.com/attachments/701698502060671079/761639815031947344/image.jpg"
 				};
-				for (int j = 0; j < jsonn2.ModList.Length; j++)
+				for (int j = 0; j < modlistjson.ModList.Length; j++)
 				{
-					if (File.Exists(str2 + "/" + jsonn2.ModList[j].Name + ".dll"))
+					if (File.Exists(modPath + "/" + modlistjson.ModList[j].Name + ".dll") || File.Exists(modPath + "/" + modlistjson.ModList[j].FileName))
 					{
+
+						if(File.Exists(modPath + "/" + modlistjson.ModList[j].Name + ".dll") && File.Exists(modPath + "/" + modlistjson.ModList[j].FileName) && modlistjson.ModList[j].FileName.Replace(".dll", "").Replace(".zip", "") != modlistjson.ModList[j].Name)
+                        {
+							DialogResult dialogResult = MessageBox.Show("Two identical mods were detected: " + modlistjson.ModList[j].Name + ".dll" + " and " + modlistjson.ModList[j].FileName + "\n Do you want to delete them?","wtf man",MessageBoxButtons.YesNo,MessageBoxIcon.Error);
+							if (dialogResult == DialogResult.Yes)
+							{
+								File.Delete(modPath + "/" + modlistjson.ModList[j].Name + ".dll");
+								File.Delete(modPath + "/" + modlistjson.ModList[j].FileName);
+							}
+	
+
+                        }
+
 						Form1.Mod mod3 = new Form1.Mod
 						{
-							Author = jsonn2.ModList[j].Author,
-							Link = jsonn2.ModList[j].Link,
-							Name = jsonn2.ModList[j].Name,
-							Date = jsonn2.ModList[j].Date,
-							Description = jsonn2.ModList[j].Description,
-							Version = jsonn2.ModList[j].Version
+							Author = modlistjson.ModList[j].Author,
+							Link = modlistjson.ModList[j].Link,
+							Name = modlistjson.ModList[j].Name,
+							Date = modlistjson.ModList[j].Date,
+							Description = modlistjson.ModList[j].Description,
+							Version = modlistjson.ModList[j].Version,
+							FileName = modlistjson.ModList[j].FileName
 						};
-						if (jsonn2.ModList[j].PictureLink.Contains(".png"))
+						if (modlistjson.ModList[j].PictureLink.Contains(".png") || modlistjson.ModList[j].PictureLink.Contains(".gif"))
 						{
-							mod3.PictureLink = jsonn2.ModList[j].PictureLink;
+							mod3.PictureLink = modlistjson.ModList[j].PictureLink;
 						}
 						else
 						{
@@ -656,22 +691,30 @@ namespace XP
 		// Token: 0x0600002C RID: 44 RVA: 0x0000402C File Offset: 0x0000222C
 		private void gotomods_Click(object sender, EventArgs e)
 		{
+/*            try
+            {
+				Form1.JSONN jsonn = (Form1.JSONN)new DataContractJsonSerializer(typeof(Form1.JSONN)).ReadObject(new MemoryStream(webClient.DownloadData("https://www.dropbox.com/s/q2xe3gr1ema5591/modlist_3.json?dl=1")));
+			} catch (Exception b)
+            {
+				MessageBox.Show(b.Message);
+            }
+*/
 			welcometext.Visible = false;
-			int num = 0;
+/*			int num = 0;
 			foreach (Form1.ModListing modListing in Form1.ModListings)
 			{
 				num++;
-			}
+			}*/
 			download.Enabled = false;
-			string str = num.ToString();
-			string date = DateTime.UtcNow.ToString("MM/dd/yyyy");
-			Form1.Mod mod = new Form1.Mod();
+/*			string str = num.ToString();
+			string date = DateTime.UtcNow.ToString("MM/dd/yyyy");*/
+/*			Form1.Mod mod = new Form1.Mod();
 			mod.Author = "";
 			mod.Name = "Mods Count";
 			mod.Date = date;
 			mod.Description = "Mods: " + str;
 			mod.Version = "";
-			mod.PictureLink = "https://drive.google.com/uc?export=download&id=1zoWS9DvfNQaVeEIliMEeLwI2APQkd-u3";
+			mod.PictureLink = "https://drive.google.com/uc?export=download&id=1zoWS9DvfNQaVeEIliMEeLwI2APQkd-u3";*/
 			this.ModName.Visible = false;
 			this.ModAuthor.Visible = false;
 			openfolder.Visible = false;
@@ -680,7 +723,7 @@ namespace XP
 			this.ModDownloads.Visible = false;
 			this.ModPic.Visible = false;
 			this.searchin.Text = "";
-			this.mymods.Text = "My Mods";
+			//this.mymods.Text = "My Mods";
 			this.ItemList.Visible = true;
 			this.mymods.Visible = true;
 			this.download.Visible = true;
@@ -698,20 +741,44 @@ namespace XP
 			this.XPcheck.Visible = false;
 			this.downloadbar.Width = 240;
 			this.downloadperc.Location = new Point(170, 527);
-			refreshList(0);
+			//refreshList(0);
+			foreach (ModListing mod in ModListings)
+			{
+				string modFile = pathToMods + "\\" + mod.ItemName.Text + ".dll";
+				if (File.Exists(modFile) && !mod.ItemDetails.FileName.Contains(".zip") && mod.ItemDetails.FileName.Replace(".dll","").Replace(".zip","") != mod.ItemName.Text)
+				{
+					Console.WriteLine(modFile);
+					DialogResult dialogResult = MessageBox.Show("Mods with incorrect names were detected. Do you want to rename them?", "Wrong names", MessageBoxButtons.YesNo,MessageBoxIcon.Warning);
+					
+					if (dialogResult == DialogResult.Yes)
+					{
+
+						DetectOldModsNames();
+					}
+					return;
+				}
+				//Console.WriteLine("idk");
+			}
+
+
+
+
+
+
+			//
 		}
 
 		// Token: 0x0600002D RID: 45 RVA: 0x00004228 File Offset: 0x00002428
 		private void button1_Click(object sender, EventArgs e)
 		{
-			download.Enabled = false;
-			this.mymods.Visible = true;
-			if (this.mymods.Visible)
-			{
+		
+			//download.Enabled = false;
+			//this.mymods.Visible = true;
+	
 
-				download.Enabled = false;
-				download.Text = "Download";
-				download.Enabled = true;
+			//	download.Enabled = false;
+			//	download.Text = "Download";
+			//	download.Enabled = true;
 				welcometext.Visible = true;
 				this.updatemods.Visible = false;
 				openfolder.Visible = false;
@@ -754,10 +821,10 @@ namespace XP
 				this.downloadbar.Width = 633;
 				this.downloadperc.Location = new Point(559, 527);
 				return;
-			}
+			
 			this.mymods.Visible = true;
 			this.submodl.Visible = false;
-			this.refreshList(0);
+		
 		}
 
 		private bool ml = false;
@@ -804,7 +871,7 @@ namespace XP
 			{
 				Directory.CreateDirectory(text);
 			}
-			Uri addresss = new Uri("http://tldworkshop.hopto.org/mods/TLDPatcherNEW.zip");
+			Uri addresss = new Uri("https://www.dropbox.com/s/629l64ai75ok24h/TLDPatcherNEW.zip?dl=1");
 			if (File.Exists(text + "/temp/TLDPatcherNEW.zip"))
 			{
 				File.Delete(text + "/temp/TLDPatcherNEW.zip");
@@ -1174,7 +1241,22 @@ namespace XP
 			}
 			
 		}
-
+		string pathToMods = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "TheLongDrive\\Mods");
+		public void DetectOldModsNames()
+        {
+			foreach(ModListing mod in ModListings)
+            {
+				string modFile = pathToMods + "\\" + mod.ItemName.Text + ".dll";
+				if(File.Exists(modFile) && !mod.ItemDetails.FileName.Contains(".zip") && mod.ItemDetails.FileName.Replace(".dll", "").Replace(".zip", "") != mod.ItemName.Text)
+                {
+					if (File.Exists(pathToMods + "\\" + mod.ItemDetails.FileName))
+						File.Delete(pathToMods + "\\" + mod.ItemDetails.FileName);
+					File.Move(modFile, pathToMods+"\\" + mod.ItemDetails.FileName);
+					//Console.WriteLine("moved");
+				}
+				//Console.WriteLine("idk");
+            }
+        }
 		// Token: 0x0600003C RID: 60 RVA: 0x000052D4 File Offset: 0x000034D4
 		private void Download()
 		{
@@ -1194,7 +1276,7 @@ namespace XP
 					{
 						File.Delete(text + "/" + Form1.selectedMod.ItemName.Text + ".dll");
 					}
-					this.webClient.DownloadFileAsync(address, text + "/" + Form1.selectedMod.ItemName.Text + ".dll");
+					this.webClient.DownloadFileAsync(address, text + "/");
 					this.webClient.DownloadProgressChanged += this.webClient_DownloadProgressChanged;
 					this.webClient.DownloadFileCompleted += this.webClient_DownloadFileCompleted;
 					this.sw.Start();
@@ -1387,6 +1469,8 @@ namespace XP
 			// Token: 0x04000056 RID: 86
 			public Label ItemDate;
 
+	
+
 			// Token: 0x04000057 RID: 87
 			public Label ItemDescription;
 
@@ -1439,6 +1523,10 @@ namespace XP
 			// (set) Token: 0x0600005C RID: 92 RVA: 0x00008A98 File Offset: 0x00006C98
 			[DataMember(Name = "PictureLink")]
 			public string PictureLink { get; set; }
+
+
+			[DataMember(Name = "FileName")]
+			public string FileName { get; set; }
 		}
 
 		// Token: 0x0200000C RID: 12

@@ -301,7 +301,6 @@
             this.downloadbar.Name = "downloadbar";
             this.downloadbar.Size = new System.Drawing.Size(633, 15);
             this.downloadbar.TabIndex = 15;
-            this.downloadbar.Value = 50;
             this.downloadbar.Visible = false;
             // 
             // downloadtext
@@ -323,7 +322,7 @@
             this.downloadperc.Name = "downloadperc";
             this.downloadperc.Size = new System.Drawing.Size(90, 13);
             this.downloadperc.TabIndex = 17;
-            this.downloadperc.Text = "50%";
+            this.downloadperc.Text = "0%";
             this.downloadperc.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.downloadperc.Visible = false;
             // 
@@ -578,7 +577,7 @@
             // 
             // searchin
             // 
-            this.searchin.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.searchin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.searchin.Location = new System.Drawing.Point(448, 35);
             this.searchin.Name = "searchin";
             this.searchin.Size = new System.Drawing.Size(184, 20);
@@ -588,7 +587,7 @@
             // 
             // searchl
             // 
-            this.searchl.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.searchl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.searchl.AutoSize = true;
             this.searchl.Location = new System.Drawing.Point(350, 38);
             this.searchl.Name = "searchl";
@@ -801,7 +800,7 @@
             this.TitleText.Name = "TitleText";
             this.TitleText.Size = new System.Drawing.Size(245, 29);
             this.TitleText.TabIndex = 11;
-            this.TitleText.Text = "The Long Drive Mod Workshop 7.1.5\r\n";
+            this.TitleText.Text = "The Long Drive Mod Workshop 7.2\r\n";
             this.TitleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.TitleText.UseVisualStyleBackColor = false;
             this.TitleText.Click += new System.EventHandler(this.Close_Window);
