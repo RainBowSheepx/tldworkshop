@@ -46,8 +46,16 @@ namespace XP
 			{
 				this.checkBox1.Checked = true;
 			}
+			this.selectServer.SelectedIndexChanged += selectServer_Changed;
 		}
+		private int currentServer = 0;
+	 	void selectServer_Changed(object sender, EventArgs e)
+        {
+			Console.WriteLine(this.selectServer.SelectedIndex);
+			currentServer = this.selectServer.SelectedIndex;
+			refreshList(0);
 
+        }
 		// Token: 0x06000017 RID: 23 RVA: 0x000026F1 File Offset: 0x000008F1
 		private void Move_Window(object sender, MouseEventArgs e)
 		{
@@ -167,7 +175,7 @@ namespace XP
 		{
 			return Math.Abs(num1 - num2) <= distanceThreshold;
 		}
-
+		static private Stream stream;
 		// Token: 0x06000020 RID: 32 RVA: 0x00002A14 File Offset: 0x00000C14
 		private static Image DownloadImage(string fromUrl)
 		{
@@ -176,13 +184,16 @@ namespace XP
 			{
 				if (fromUrl.ToLower().StartsWith("http") || !fromUrl.ToLower().EndsWith("gif"))
 				{
-					using (WebClient webClient = new WebClient())
-					{
-						using (Stream stream = webClient.OpenRead(fromUrl))
+
+                    using (webStream = new WebClient())
+                    {
+						using (stream = webStream.OpenRead(fromUrl))
 						{
 							return Image.FromStream(stream);
 						}
 					}
+
+					
 				}
 				using (FileStream fileStream = new FileStream(fromUrl, FileMode.Open, FileAccess.Read))
 				{
@@ -314,7 +325,8 @@ namespace XP
 				}
 				else
 				{
-					mod.PictureLink = "http://tldworkshop.hopto.org/mods/pictures/notfound.png";
+					mod.PictureLink = "http://
+to.org/mods/pictures/notfound.png";
 				}
 				Form1.ModListings.Add(new Form1.ModListing(mod));
 			}*/
@@ -393,8 +405,11 @@ namespace XP
 			{
 				MessageBox.Show(b.Message);
 			}
-			File.Copy(text + "/temp/patcher/TLDLoader.dll", Application.StartupPath + "/TLDLoader.dll", true);
-			Process.Start(text + "/temp/patcher/TLDPatcher.exe", "\"" + text + "/temp/patcher/\"");
+			//OLD RUN
+			//	File.Copy(text + "/temp/patcher/TLDLoader.dll", Application.StartupPath + "/TLDLoader.dll", true);
+			//	Process.Start(text + "/temp/patcher/TLDPatcher.exe", "\"" + text + "/temp/patcher/\"");
+			// NEW RUN
+			Process.Start(Path.Combine(text, "temp/patcher/"));
 		}
 
 		// Token: 0x06000027 RID: 39 RVA: 0x000033F8 File Offset: 0x000015F8
@@ -511,13 +526,23 @@ namespace XP
 		// Token: 0x0600002A RID: 42 RVA: 0x000039B8 File Offset: 0x00001BB8
 		public void refreshList(int mods)
 		{
-			if(modlistjson == null)
+			if(stream != null)
             {
-				WebClient web = new WebClient();
+				stream.Close();
+				webStream.Dispose();
+            }
+		
+	
+			
 				
 				DataContractJsonSerializer json1 = new DataContractJsonSerializer(typeof(JSONN));
+				if(currentServer == 0)
 				modlistjson = (JSONN)json1.ReadObject(new System.IO.MemoryStream(web.DownloadData("https://www.dropbox.com/s/q2xe3gr1ema5591/modlist_3.json?dl=1")));
-			}
+				else if (currentServer == 1)
+					modlistjson = (JSONN)json1.ReadObject(new System.IO.MemoryStream(web.DownloadData("https://tldworkshop.000webhostapp.com/modlist_3_webhost.json")));
+				else if (currentServer == 2)
+					modlistjson = (JSONN)json1.ReadObject(new System.IO.MemoryStream(web.DownloadData("http://tldworkshop.hopto.org/modlist_3_old.json")));
+			
 
 
 			loadingmods.Visible = true;
@@ -734,14 +759,19 @@ namespace XP
 			this.welcome.Visible = false;
 			this.credits.Visible = false;
 			this.modder.Visible = false;
+			this.selectServer.Visible = false;
+			this.serverLabel.Visible = false;
 			this.downpatcher.Visible = false;
-			this.gotomods.Visible = false;
+			
+				this.gotomods.Visible = false;
 			this.label1.Visible = false;
 			this.checkBox1.Visible = false;
 			this.XPcheck.Visible = false;
 			this.downloadbar.Width = 240;
+
 			this.downloadperc.Location = new Point(170, 527);
-			//refreshList(0);
+			if (ModListings.Count < 1)
+				refreshList(0);
 			foreach (ModListing mod in ModListings)
 			{
 				string modFile = pathToMods + "\\" + mod.ItemName.Text + ".dll";
@@ -815,6 +845,8 @@ namespace XP
 				this.modder.Visible = true;
 				this.downpatcher.Visible = true;
 				this.gotomods.Visible = true;
+			this.selectServer.Visible = true;
+			this.serverLabel.Visible = true;
 				this.label1.Visible = true;
 				this.checkBox1.Visible = true;
 				this.XPcheck.Visible = true;
@@ -860,7 +892,9 @@ namespace XP
 			this.downloadbar.Visible = true;
 			this.downloadperc.Visible = true;
 			this.downloadtext.Visible = true;
-			string str = this.webClient.DownloadString("http://tldworkshop.hopto.org/mods/patchver.txt");
+			string str;
+
+						str =this.webClient.DownloadString("http://tldworkshop.hopto.org/mods/patchver.txt");
 			this.downloadtext.Text = "Downloading: TLDPatcher " + str;
 			this.downloadperc.Text = "0%";
 			this.downloadbar.Value = 0;
@@ -871,14 +905,36 @@ namespace XP
 			{
 				Directory.CreateDirectory(text);
 			}
-			Uri addresss = new Uri("https://www.dropbox.com/s/629l64ai75ok24h/TLDPatcherNEW.zip?dl=1");
+			Uri addresss = null;
+			if (currentServer == 0)
+				addresss = new Uri("https://www.dropbox.com/s/629l64ai75ok24h/TLDPatcherNEW.zip?dl=1");
+			else if (currentServer == 1)
+				addresss = new Uri("https://tldworkshop.000webhostapp.com/mods/TLDPatcherNEW.zip");
+			else if (currentServer == 2)
+				addresss = new Uri("http://tldworkshop.hopto.org/mods/TLDPatcherNEW.zip");
 			if (File.Exists(text + "/temp/TLDPatcherNEW.zip"))
 			{
+                try { 
 				File.Delete(text + "/temp/TLDPatcherNEW.zip");
+				}
+				catch (UnauthorizedAccessException)
+				{
+					MessageBox.Show("Close TLDPatcherNEW.zip", "errrror", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					Application.Exit();
+				}
 			}
 			if (Directory.Exists(text + "/temp/patcher/"))
 			{
-				Directory.Delete(text + "/temp/patcher/", true);
+                try
+                {
+					Directory.Delete(text + "/temp/patcher/", true);
+				}
+                catch(UnauthorizedAccessException)
+                {
+					MessageBox.Show("Please, close tldpatcher before intstall!", "errrror", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					Application.Exit();
+                }
+			
 			}
 			if (!Directory.Exists(text + "/temp/"))
 			{
@@ -925,7 +981,8 @@ namespace XP
 				this.SubModDes.BackColor = Color.Gray;
 				this.submoddragdrop.BackColor = Color.Gray;
 				this.searchin.BackColor = Color.Gray;
-				this.refreshList(0);
+				if (ModListings.Count > 0)
+					this.refreshList(0);
 				return;
 			}
 			try
@@ -950,6 +1007,7 @@ namespace XP
 			this.itemPanel.BackColor = Color.GhostWhite;
 			this.SubModDes.BackColor = Color.GhostWhite;
 			this.submoddragdrop.BackColor = Color.GhostWhite;
+			if(ModListings.Count > 0)
 			this.refreshList(0);
 		}
 
@@ -1052,7 +1110,8 @@ namespace XP
 					{
 						Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\Submissions", true);
 					}
-					using (WebClient webClient = new WebClient())
+					using (
+						webClient = new WebClient())
 					{
 						webClient.Credentials = new NetworkCredential("kolben1000", "Kolben1000");
 						webClient.DownloadFile("ftp://files.000webhost.com/htdocs/Submissions/Submissions.zip", Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\Submissions.zip");
@@ -1107,7 +1166,7 @@ namespace XP
 					}
 					this.mymods.Visible = true;
 					this.submodl.Visible = false;
-					this.refreshList(0);
+					//this.refreshList(0);
 					return;
 				}
 				else
@@ -1336,6 +1395,7 @@ namespace XP
 		private WebClient webClient = new WebClient();
 
 		private WebClient web = new WebClient();
+		static WebClient webStream = new WebClient();
 
 		// Token: 0x04000010 RID: 16
 		private Stopwatch sw = new Stopwatch();

@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyTitle("TLD Mod Workshop BETA")]
+[assembly: AssemblyTitle("TLD Mod Workshop 7.3")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("_RainBowSheep_ & RUNDEN")]
 [assembly: AssemblyProduct("Workshopв")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("bf042407-4041-4e15-a042-f1a887fec5ea")]

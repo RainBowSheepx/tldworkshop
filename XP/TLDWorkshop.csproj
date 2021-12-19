@@ -82,6 +82,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />
+    <None Include="Properties\DataSources\CBFormCtrl.datasource" />
+    <None Include="Properties\DataSources\ControlFactory.datasource" />
+    <None Include="Properties\DataSources\EmbeddedAssembly.datasource" />
+    <None Include="Properties\DataSources\Form1.CheckVer.datasource" />
+    <None Include="Properties\DataSources\Form1.datasource" />
+    <None Include="Properties\DataSources\Form1.JSONN.datasource" />
+    <None Include="Properties\DataSources\Form1.Mod.datasource" />
+    <None Include="Properties\DataSources\Form1.ModListing.datasource" />
+    <None Include="Properties\DataSources\Program.datasource" />
+    <None Include="Properties\DataSources\XP.Properties.Resources.datasource" />
+    <None Include="Properties\DataSources\XP.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

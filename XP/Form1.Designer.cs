@@ -77,6 +77,8 @@
             this.welcometext = new System.Windows.Forms.PictureBox();
             this.loadingmods = new System.Windows.Forms.PictureBox();
             this.openfolder = new System.Windows.Forms.Button();
+            this.selectServer = new System.Windows.Forms.ComboBox();
+            this.serverLabel = new System.Windows.Forms.Label();
             this.ItemList.SuspendLayout();
             this.itemPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ModThumbnail)).BeginInit();
@@ -141,7 +143,7 @@
             this.ItemList.Controls.Add(this.itemPanel);
             this.ItemList.Controls.Add(this.submodb1);
             this.ItemList.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ItemList.Location = new System.Drawing.Point(12, 61);
+            this.ItemList.Location = new System.Drawing.Point(16, 61);
             this.ItemList.Name = "ItemList";
             this.ItemList.Size = new System.Drawing.Size(637, 446);
             this.ItemList.TabIndex = 12;
@@ -668,7 +670,7 @@
             // 
             this.ModPic.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.ModPic.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.ModPic.Location = new System.Drawing.Point(12, 67);
+            this.ModPic.Location = new System.Drawing.Point(19, 57);
             this.ModPic.Name = "ModPic";
             this.ModPic.Size = new System.Drawing.Size(300, 300);
             this.ModPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -798,9 +800,9 @@
             this.TitleText.MaximumSize = new System.Drawing.Size(0, 29);
             this.TitleText.MinimumSize = new System.Drawing.Size(0, 29);
             this.TitleText.Name = "TitleText";
-            this.TitleText.Size = new System.Drawing.Size(245, 29);
+            this.TitleText.Size = new System.Drawing.Size(234, 29);
             this.TitleText.TabIndex = 11;
-            this.TitleText.Text = "The Long Drive Mod Workshop 7.2\r\n";
+            this.TitleText.Text = "The Long Drive Mod Workshop 7.3";
             this.TitleText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.TitleText.UseVisualStyleBackColor = false;
             this.TitleText.Click += new System.EventHandler(this.Close_Window);
@@ -843,6 +845,30 @@
             this.openfolder.Visible = false;
             this.openfolder.Click += new System.EventHandler(this.openfolder_Click);
             // 
+            // selectServer
+            // 
+            this.selectServer.DisplayMember = "Dropbox";
+            this.selectServer.FormattingEnabled = true;
+            this.selectServer.Items.AddRange(new object[] {
+            "Dropbox",
+            "000webhost",
+            "Old Server"});
+            this.selectServer.Location = new System.Drawing.Point(534, 34);
+            this.selectServer.Name = "selectServer";
+            this.selectServer.Size = new System.Drawing.Size(121, 21);
+            this.selectServer.TabIndex = 56;
+            this.selectServer.Text = "Dropbox";
+            this.selectServer.ValueMember = "Dropbox";
+            // 
+            // serverLabel
+            // 
+            this.serverLabel.AutoSize = true;
+            this.serverLabel.Location = new System.Drawing.Point(490, 37);
+            this.serverLabel.Name = "serverLabel";
+            this.serverLabel.Size = new System.Drawing.Size(38, 13);
+            this.serverLabel.TabIndex = 58;
+            this.serverLabel.Text = "Server";
+            // 
             // Form1
             // 
             this.AllowDrop = true;
@@ -851,6 +877,8 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.CancelButton = this.TitleText;
             this.ClientSize = new System.Drawing.Size(661, 570);
+            this.Controls.Add(this.serverLabel);
+            this.Controls.Add(this.selectServer);
             this.Controls.Add(this.downloadbar);
             this.Controls.Add(this.openfolder);
             this.Controls.Add(this.welcometext);
@@ -1094,5 +1122,7 @@
         private System.Windows.Forms.PictureBox welcometext;
         private System.Windows.Forms.PictureBox loadingmods;
         private System.Windows.Forms.Button openfolder;
+        private System.Windows.Forms.ComboBox selectServer;
+        private System.Windows.Forms.Label serverLabel;
     }
 }
